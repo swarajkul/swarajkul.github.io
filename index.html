@@ -138,6 +138,8 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
 
     /* Optional: slightly deeper hero in dark mode */
@@ -426,6 +428,39 @@
 
       .btn { padding: 0.85rem 1.6rem; }
     }
+    /* ===== HERO PARTICLES ===== */
+    .hero{
+      position: relative;
+      overflow: hidden;
+    }
+
+    #particles{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+      opacity: 0.35; /* subtle */
+    }
+
+    /* Ensure text stays above canvas */
+    .hero > *:not(#particles){
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Optional subtle glow overlay (premium feel) */
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(255,255,255,0.18), transparent 55%),
+        radial-gradient(circle at 75% 70%, rgba(255,255,255,0.12), transparent 60%);
+      pointer-events:none;
+      z-index:0;
+    }
 
     html { scroll-behavior: smooth; }
   </style>
@@ -457,6 +492,7 @@
 
   <!-- Hero Section -->
   <section class="hero">
+    <canvas id="particles"></canvas>
     <h1>Swaraj Kulkarni</h1>
     <p class="subtitle">Data Analyst & Data Scientist</p>
     <p class="contact-info">San Jose, California</p>
@@ -724,5 +760,124 @@
       }
     });
   </script>
+
+  <script>
+(() => {
+  const canvas = document.getElementById('particles');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let w = 0, h = 0, dpr = 1;
+  let particles = [];
+  let raf = null;
+
+  const CONFIG = {
+    density: 0.00008,
+    maxParticles: 70,
+    speed: 0.35,
+    linkDist: 110,
+    radiusMin: 1,
+    radiusMax: 2.2
+  };
+
+  function isDark(){
+    return document.body.classList.contains('dark');
+  }
+
+  function colors(){
+    return isDark()
+      ? { dot: 'rgba(255,255,255,0.55)', line: 'rgba(255,255,255,0.10)' }
+      : { dot: 'rgba(255,255,255,0.65)', line: 'rgba(255,255,255,0.14)' };
+  }
+
+  function resize(){
+    const rect = canvas.getBoundingClientRect();
+    dpr = window.devicePixelRatio || 1;
+    w = rect.width;
+    h = rect.height;
+
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const targetCount = Math.min(
+      CONFIG.maxParticles,
+      Math.floor(w * h * CONFIG.density)
+    );
+
+    particles = [];
+    for (let i = 0; i < targetCount; i++){
+      particles.push(makeParticle());
+    }
+  }
+
+  function rand(min, max){
+    return Math.random() * (max - min) + min;
+  }
+
+  function makeParticle(){
+    return {
+      x: rand(0, w),
+      y: rand(0, h),
+      vx: rand(-CONFIG.speed, CONFIG.speed),
+      vy: rand(-CONFIG.speed, CONFIG.speed),
+      r: rand(CONFIG.radiusMin, CONFIG.radiusMax)
+    };
+  }
+
+  function step(){
+    ctx.clearRect(0, 0, w, h);
+    const { dot, line } = colors();
+
+    for (const p of particles){
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < -10) p.x = w + 10;
+      if (p.x > w + 10) p.x = -10;
+      if (p.y < -10) p.y = h + 10;
+      if (p.y > h + 10) p.y = -10;
+    }
+
+    // Draw lines
+    ctx.strokeStyle = line;
+    for (let i = 0; i < particles.length; i++){
+      for (let j = i + 1; j < particles.length; j++){
+        const a = particles[i], b = particles[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        if (dist < CONFIG.linkDist){
+          ctx.globalAlpha = 1 - (dist / CONFIG.linkDist);
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw dots
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = dot;
+    for (const p of particles){
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    raf = requestAnimationFrame(step);
+  }
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  resize();
+  step();
+
+  window.addEventListener('resize', resize);
+})();
+</script>
 </body>
 </html>
