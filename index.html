@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Swaraj Kulkarni - Data Analyst & Data Scientist specializing in Machine Learning, Data Engineering, and Business Intelligence">
     <title>Swaraj Kulkarni | Data Analyst & Data Scientist</title>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --primary-color: #2563eb;
@@ -66,9 +63,7 @@
             transition: color 0.3s;
         }
 
-        nav a:hover {
-            color: var(--primary-color);
-        }
+        nav a:hover { color: var(--primary-color); }
 
         /* Mobile menu toggle */
         .menu-toggle {
@@ -94,10 +89,7 @@
             text-align: center;
         }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
 
         .hero .subtitle {
             font-size: 1.5rem;
@@ -117,6 +109,7 @@
             margin: 0 0.5rem;
         }
 
+        /* Buttons */
         .btn {
             display: inline-block;
             padding: 0.75rem 2rem;
@@ -129,14 +122,34 @@
             margin: 0.5rem;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
+        .btn:hover { transform: translateY(-2px); }
+
+        /* Explicit primary class to match your HTML usage */
+        .btn-primary {
+            background: white;
+            color: var(--primary-color);
         }
 
+        /* Base outline button for light sections (Contact, etc.) */
         .btn-outline {
             background: transparent;
-            border: 2px solid white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Outline button inside hero (white outline) */
+        .hero .btn-outline {
+            border-color: white;
             color: white;
+        }
+
+        /* CTA wrappers */
+        .hero-cta,
+        .contact-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         /* Container */
@@ -148,6 +161,7 @@
 
         section {
             margin-bottom: 4rem;
+            scroll-margin-top: 90px; /* prevents fixed nav overlap on anchor links */
         }
 
         h2 {
@@ -157,6 +171,14 @@
             border-bottom: 3px solid var(--primary-color);
             padding-bottom: 0.5rem;
             display: inline-block;
+        }
+
+        /* Lead text utility (replaces inline About styling) */
+        .lead {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            max-width: 900px;
         }
 
         /* Education */
@@ -216,9 +238,7 @@
             margin-bottom: 1rem;
         }
 
-        .experience-item ul {
-            margin-left: 1.5rem;
-        }
+        .experience-item ul { margin-left: 1.5rem; }
 
         .experience-item li {
             margin-bottom: 0.75rem;
@@ -270,6 +290,15 @@
             line-height: 1.8;
         }
 
+        /* Contact */
+        .contact-section { text-align: center; }
+
+        .contact-text {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
         /* Footer */
         footer {
             background: var(--text-dark);
@@ -297,46 +326,27 @@
                 padding: 1rem;
             }
 
-            nav ul.active {
-                display: flex;
-            }
+            nav ul.active { display: flex; }
+            .menu-toggle { display: flex; }
 
-            .menu-toggle {
-                display: flex;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero .subtitle {
-                font-size: 1.2rem;
-            }
-
-            h2 {
-                font-size: 2rem;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
+            .hero h1 { font-size: 2rem; }
+            .hero .subtitle { font-size: 1.2rem; }
+            h2 { font-size: 2rem; }
+            .skills-grid { grid-template-columns: 1fr; }
         }
 
         /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav>
         <div class="container">
             <div class="logo">SK</div>
             <div class="menu-toggle" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </div>
             <ul id="navMenu">
                 <li><a href="#about">About</a></li>
@@ -350,36 +360,37 @@
     </nav>
 
     <!-- Hero Section -->
-<section class="hero">
-  <h1>Swaraj Kulkarni</h1>
-  <p class="subtitle">Data Analyst & Data Scientist</p>
-  <p class="contact-info">San Jose, California</p>
+    <section class="hero">
+        <h1>Swaraj Kulkarni</h1>
+        <p class="subtitle">Data Analyst & Data Scientist</p>
+        <p class="contact-info">San Jose, California</p>
 
-  <div class="hero-cta">
-    <a href="https://linkedin.com/in/SwarajKul"
-       target="_blank"
-       rel="noopener noreferrer"
-       class="btn btn-primary"
-       aria-label="Visit Swaraj Kulkarni LinkedIn profile">
-      View LinkedIn
-    </a>
+        <div class="hero-cta">
+            <a href="https://linkedin.com/in/SwarajKul"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn btn-primary"
+               aria-label="Visit Swaraj Kulkarni LinkedIn profile">
+                View LinkedIn
+            </a>
 
-    <a href="#contact"
-       class="btn btn-outline"
-       aria-label="Scroll to contact section">
-      Contact Me
-    </a>
-  </div>
-</section>
-    <!-- About Section -->
+            <a href="#contact"
+               class="btn btn-outline"
+               aria-label="Scroll to contact section">
+                Contact Me
+            </a>
+        </div>
+    </section>
+
     <div class="container">
+        <!-- About Section -->
         <section id="about">
             <h2>About Me</h2>
-            <p style="font-size: 1.1rem; color: var(--text-light); line-height: 1.8; max-width: 900px;">
-                I'm a data professional with expertise in data analytics, machine learning, and business intelligence. 
-                Currently working as a Data Analyst at San Jose State University, I specialize in building scalable 
-                data pipelines, developing predictive models, and creating interactive dashboards that drive 
-                data-informed decision-making. With a Master's in Applied Data Science and hands-on experience 
+            <p class="lead">
+                I'm a data professional with expertise in data analytics, machine learning, and business intelligence.
+                Currently working as a Data Analyst at San Jose State University, I specialize in building scalable
+                data pipelines, developing predictive models, and creating interactive dashboards that drive
+                data-informed decision-making. With a Master's in Applied Data Science and hands-on experience
                 across multiple industries, I transform complex data into actionable insights.
             </p>
         </section>
@@ -472,11 +483,11 @@
             <div class="project-item">
                 <h3>Intelligent Automation Agent using n8n</h3>
                 <p>
-                    Developed an AI-powered automation agent in n8n that integrated LLM reasoning with tool-based 
-                    actions (HTTP, Gmail, custom code) to automate real-world workflows. Implemented context memory 
-                    and prompt engineering to enable the agent to understand user intent, maintain conversation state, 
-                    and execute multi-step tasks autonomously. Built and optimized modular workflow nodes for data 
-                    transformation, API calls, and notifications, improving task efficiency and reducing manual 
+                    Developed an AI-powered automation agent in n8n that integrated LLM reasoning with tool-based
+                    actions (HTTP, Gmail, custom code) to automate real-world workflows. Implemented context memory
+                    and prompt engineering to enable the agent to understand user intent, maintain conversation state,
+                    and execute multi-step tasks autonomously. Built and optimized modular workflow nodes for data
+                    transformation, API calls, and notifications, improving task efficiency and reducing manual
                     intervention by over 60%.
                 </p>
             </div>
@@ -484,10 +495,10 @@
             <div class="project-item">
                 <h3>PII Detection using BERT & DeBERTa (Kaggle – Top 60 Global Rank)</h3>
                 <p>
-                    Participated in a Kaggle competition hosted by The Learning Agency Lab and Vanderbilt University. 
-                    The objective was to develop a model to detect and remove personally identifiable information (PII) from educational data. 
-                    Leveraged BERT and Deberta models to create reliable automated techniques, enhancing the scalability and accessibility of educational datasets. 
-                    The project focused on improving recall while maintaining precision, evaluated using the micro F5 metric. This work supports the development of effective tools and 
+                    Participated in a Kaggle competition hosted by The Learning Agency Lab and Vanderbilt University.
+                    The objective was to develop a model to detect and remove personally identifiable information (PII) from educational data.
+                    Leveraged BERT and Deberta models to create reliable automated techniques, enhancing the scalability and accessibility of educational datasets.
+                    The project focused on improving recall while maintaining precision, evaluated using the micro F5 metric. This work supports the development of effective tools and
                     interventions for teachers and students by facilitating the release of high-quality public educational datasets.
                 </p>
             </div>
@@ -499,40 +510,32 @@
             <div class="skills-grid">
                 <div class="skill-category">
                     <h3>Data Engineering & Analytics</h3>
-                    <p>Python, SQL, PostgreSQL, Excel, AWS (S3, EC2, Sagemaker), Azure, Hadoop, Kafka, GCP, CI/CD, 
+                    <p>Python, SQL, PostgreSQL, Excel, AWS (S3, EC2, Sagemaker), Azure, Hadoop, Kafka, GCP, CI/CD,
                     Snowflake, Docker, Redshift, BigQuery, A/B Testing, Hypothesis Testing, Data Modelling</p>
                 </div>
 
                 <div class="skill-category">
                     <h3>BI & Collaboration Tools</h3>
-                    <p>
-                    
-                    Tableau, Power BI, Looker Studio, Git/GitHub, JIRA, Selenium, Agile (Scrum/Kanban)
-                    </p>
+                    <p>Tableau, Power BI, Looker Studio, Git/GitHub, JIRA, Selenium, Agile (Scrum/Kanban)</p>
                 </div>
 
                 <div class="skill-category">
                     <h3>Machine Learning</h3>
-                    <p> Scikit-learn, Keras, Regression, Classification, Clustering, Time-Series Forecasting, Predictive Modeling
-                    Random Forests, XGBoost, LightGBM, CatBoost, SVM, Naive Bayes, K-Means, DBSCAN, PCA
-                    </p>
+                    <p>Scikit-learn, Keras, Regression, Classification, Clustering, Time-Series Forecasting, Predictive Modeling
+                    Random Forests, XGBoost, LightGBM, CatBoost, SVM, Naive Bayes, K-Means, DBSCAN, PCA</p>
                 </div>
 
                 <div class="skill-category">
                     <h3>Deep Learning & Neural Networks</h3>
-                    <p>
-                    TensorFlow, PyTorch, Keras, CNNs, RNNs, LSTM, Transformers, Transfer Learning, Model Training, Hyperparameter Tuning, GANs
-                    </p>
+                    <p>TensorFlow, PyTorch, Keras, CNNs, RNNs, LSTM, Transformers, Transfer Learning, Model Training, Hyperparameter Tuning, GANs</p>
                 </div>
 
                 <div class="skill-category">
                     <h3>Generative AI</h3>
-                    <p>LLM, Transformers, Autoencoders, LangChain, Hugging Face, Llama, Google AI Studio, 
+                    <p>LLM, Transformers, Autoencoders, LangChain, Hugging Face, Llama, Google AI Studio,
                     Vertex AI, Opal, OpenAI, Anthropic Claude, Google Gemini, Hugging Face
-                    Fine-tuning (LoRA, QLoRA)
-                    </p>
+                    Fine-tuning (LoRA, QLoRA)</p>
                 </div>
-                
             </div>
         </section>
 
@@ -565,7 +568,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Swaraj Kulkarni. All rights reserved.</p>
+        <p>&copy; 2026 Swaraj Kulkarni. All rights reserved.</p>
         <p style="margin-top: 0.5rem; opacity: 0.8;">Built with passion for data and insights</p>
     </footer>
 
