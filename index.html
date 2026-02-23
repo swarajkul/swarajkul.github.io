@@ -335,6 +335,97 @@
             .skills-grid { grid-template-columns: 1fr; }
         }
 
+        /* Slightly softer radius + consistent motion */
+        :root{
+          --radius: 10px;
+          --shadow-sm: 0 6px 16px rgba(17, 24, 39, 0.10);
+          --shadow-md: 0 12px 28px rgba(17, 24, 39, 0.14);
+        }
+
+        /* Make section headings + cards feel cleaner */
+        h2{
+          border-bottom-width: 4px;
+          letter-spacing: -0.02em;
+        }
+
+        /* Premium focus styles (keyboard users) */
+        a:focus-visible,
+        button:focus-visible{
+          outline: 3px solid rgba(37, 99, 235, 0.35);
+          outline-offset: 3px;
+          border-radius: var(--radius);
+        }
+
+/* Buttons: elevate + subtle gloss */
+        .btn{
+          border-radius: var(--radius);
+          box-shadow: var(--shadow-sm);
+          transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+          will-change: transform;
+        }
+
+        /* Hover: lift + slightly richer shadow */
+        .btn:hover{
+          transform: translateY(-3px);
+          box-shadow: var(--shadow-md);
+          filter: brightness(1.02);
+        }
+
+        /* Active press */
+        .btn:active{
+          transform: translateY(-1px);
+          box-shadow: var(--shadow-sm);
+        }
+
+        /* Outline: a touch more refined */
+        .btn-outline{
+          box-shadow: none;                 /* outline buttons often look cleaner without shadow */
+          transition: transform 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
+        }
+    
+        .btn-outline:hover{
+          background: rgba(37, 99, 235, 0.08);
+        }
+
+        /* Hero outline hover stays premium on dark background */
+        .hero .btn-outline:hover{
+          background: rgba(255,255,255,0.12);
+        }
+
+        /* Cards (Experience / Skills) premium hover */
+        .experience-item,
+        .skill-category{
+          border-radius: 14px;
+          transition: transform 220ms ease, box-shadow 220ms ease;
+        }
+
+        .experience-item:hover,
+        .skill-category:hover{
+          transform: translateY(-6px);
+          box-shadow: var(--shadow-md);
+        }
+
+        /* Project/Education blocks: slightly more depth */
+        .project-item,
+        .education-item{
+          border-radius: 14px;
+        }
+
+        /* Subtle entrance polish: reduce motion preference respected */
+        @media (prefers-reduced-motion: reduce){
+          *{
+            transition: none !important;
+            scroll-behavior: auto !important;
+          }
+        }
+
+        /* Premium mobile tap target: keep buttons comfy */
+        @media (max-width: 768px){
+          .btn{
+            padding: 0.85rem 1.6rem;
+          }
+        }
+
         /* Smooth scroll */
         html { scroll-behavior: smooth; }
     </style>
