@@ -140,7 +140,6 @@
       text-align: center;
     }
 
-    /* Optional: slightly deeper hero in dark mode */
     body.dark .hero {
       background: linear-gradient(135deg, #1d4ed8 0%, #6d28d9 100%);
     }
@@ -158,7 +157,7 @@
       text-decoration: none;
       border-radius: var(--radius);
       font-weight: 600;
-      margin: 0; /* premium: spacing controlled via flex gap */
+      margin: 0; /* spacing controlled via gap */
       box-shadow: var(--shadow-sm);
       transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
       will-change: transform;
@@ -180,7 +179,6 @@
       color: var(--primary-color);
     }
 
-    /* Outline default (good on light sections) */
     .btn-outline {
       background: transparent;
       border: 2px solid var(--primary-color);
@@ -193,7 +191,6 @@
       background: rgba(37, 99, 235, 0.08);
     }
 
-    /* Outline in hero (white outline) */
     .hero .btn-outline {
       border-color: white;
       color: white;
@@ -203,7 +200,6 @@
       background: rgba(255,255,255,0.12);
     }
 
-    /* CTA wrappers */
     .hero-cta,
     .contact-cta {
       display: flex;
@@ -234,7 +230,6 @@
       letter-spacing: -0.02em;
     }
 
-    /* Lead text utility */
     .lead {
       font-size: 1.1rem;
       color: var(--text-light);
@@ -428,6 +423,103 @@
     }
 
     html { scroll-behavior: smooth; }
+
+    /* ===== Easter Egg Floating Button ===== */
+    .easter-egg-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      background: var(--bg-light);
+      color: var(--text-dark);
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, opacity 180ms ease;
+      z-index: 1500;
+      opacity: 0.6;
+    }
+
+    .easter-egg-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: var(--shadow-md);
+      opacity: 1;
+    }
+
+    /* ===== Pac-Man modal ===== */
+    .pacman-modal{
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      padding: 1rem;
+    }
+
+    .pacman-modal.open{ display: grid; }
+
+    .pacman-dialog{
+      width: min(720px, 95vw);
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .pacman-header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1rem;
+      background: var(--bg-light);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .pacman-title{
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.01em;
+    }
+
+    .pacman-close{
+      border: 1px solid var(--border-color);
+      background: var(--bg-main);
+      color: var(--text-dark);
+      border-radius: 10px;
+      padding: 0.35rem 0.6rem;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .pacman-close:hover{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    #pacmanCanvas{
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #05070f;
+    }
+
+    .pacman-help{
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      color: var(--text-light);
+      background: var(--bg-main);
+      border-top: 1px solid var(--border-color);
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 
@@ -668,6 +760,27 @@
     <p style="margin-top: 0.5rem; opacity: 0.8;">Built with passion for data and insights</p>
   </footer>
 
+  <!-- Easter Egg Button -->
+  <button id="pacmanTrigger" class="easter-egg-btn" aria-label="Secret Game">🎮</button>
+
+  <!-- Pac-Man Easter Egg Modal -->
+  <div id="pacmanModal" class="pacman-modal" aria-hidden="true">
+    <div class="pacman-dialog" role="dialog" aria-modal="true" aria-label="Pac-Man Easter Egg">
+      <div class="pacman-header">
+        <div class="pacman-title">Pac-Man (Easter Egg)</div>
+        <button id="pacmanClose" class="pacman-close" aria-label="Close Pac-Man">✕</button>
+      </div>
+
+      <canvas id="pacmanCanvas" width="560" height="420"></canvas>
+
+      <div class="pacman-help">
+        <span><b>Controls:</b> Arrow keys</span>
+        <span><b>ESC</b> to close</span>
+        <span><b>R</b> to restart</span>
+      </div>
+    </div>
+  </div>
+
   <script>
     function toggleMenu() {
       const menu = document.getElementById('navMenu');
@@ -703,7 +816,6 @@
     /* ===== DARK MODE TOGGLE (persist + system default) ===== */
     const toggleBtn = document.getElementById("themeToggle");
 
-    // Initial theme: saved preference OR system preference
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
@@ -723,6 +835,267 @@
         toggleBtn.textContent = "🌙";
       }
     });
+
+    /* ==========================
+       Pac-Man Easter Egg
+       Opens via bottom-right button
+       ========================== */
+    (() => {
+      const modal = document.getElementById('pacmanModal');
+      const closeBtn = document.getElementById('pacmanClose');
+      const triggerBtn = document.getElementById('pacmanTrigger');
+      const canvas = document.getElementById('pacmanCanvas');
+      const ctx = canvas.getContext('2d');
+
+      let isOpen = false;
+      let raf = null;
+
+      const TILE = 20;
+      const COLS = 28; // 560 / 20
+      const ROWS = 21; // 420 / 20
+
+      function makeMap(){
+        const m = Array.from({length: ROWS}, (_, r) =>
+          Array.from({length: COLS}, (_, c) => {
+            const border = (r === 0 || r === ROWS-1 || c === 0 || c === COLS-1);
+            if (border) return 1;
+            if ((r % 4 === 0 && c > 2 && c < COLS-3) || (c % 6 === 0 && r > 2 && r < ROWS-3)) return 1;
+            return 2; // pellet
+          })
+        );
+
+        for (let r=1; r<ROWS-1; r++){
+          m[r][Math.floor(COLS/2)] = 0;
+        }
+        for (let c=1; c<COLS-1; c++){
+          m[Math.floor(ROWS/2)][c] = 0;
+        }
+
+        m[1][1] = 0; m[1][2] = 0; m[2][1] = 0;
+        m[ROWS-2][COLS-2] = 0;
+
+        return m;
+      }
+
+      let map = makeMap();
+
+      const player = {
+        x: 1 * TILE + TILE/2,
+        y: 1 * TILE + TILE/2,
+        dirX: 1, dirY: 0,
+        nextX: 1, nextY: 0,
+        speed: 2.2,
+        mouth: 0,
+        score: 0
+      };
+
+      const ghost = {
+        x: (COLS-2) * TILE + TILE/2,
+        y: (ROWS-2) * TILE + TILE/2,
+        dirX: -1, dirY: 0,
+        speed: 1.9
+      };
+
+      function resetGame(){
+        map = makeMap();
+        player.x = 1*TILE + TILE/2;
+        player.y = 1*TILE + TILE/2;
+        player.dirX = 1; player.dirY = 0;
+        player.nextX = 1; player.nextY = 0;
+        player.score = 0;
+
+        ghost.x = (COLS-2)*TILE + TILE/2;
+        ghost.y = (ROWS-2)*TILE + TILE/2;
+        ghost.dirX = -1; ghost.dirY = 0;
+      }
+
+      function tileAt(px, py){
+        const c = Math.floor(px / TILE);
+        const r = Math.floor(py / TILE);
+        if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return 1;
+        return map[r][c];
+      }
+
+      function canMove(px, py){
+        const r = 7;
+        return (
+          tileAt(px-r, py-r) !== 1 &&
+          tileAt(px+r, py-r) !== 1 &&
+          tileAt(px-r, py+r) !== 1 &&
+          tileAt(px+r, py+r) !== 1
+        );
+      }
+
+      function eatPellet(){
+        const c = Math.floor(player.x / TILE);
+        const r = Math.floor(player.y / TILE);
+        if (map[r][c] === 2){
+          map[r][c] = 0;
+          player.score += 10;
+        }
+      }
+
+      function drawMap(){
+        for (let r=0; r<ROWS; r++){
+          for (let c=0; c<COLS; c++){
+            const t = map[r][c];
+            const x = c*TILE;
+            const y = r*TILE;
+
+            if (t === 1){
+              ctx.fillStyle = '#1f4cff';
+              ctx.fillRect(x, y, TILE, TILE);
+            } else if (t === 2){
+              ctx.fillStyle = '#ffd966';
+              ctx.beginPath();
+              ctx.arc(x + TILE/2, y + TILE/2, 2.5, 0, Math.PI*2);
+              ctx.fill();
+            }
+          }
+        }
+      }
+
+      function drawPlayer(){
+        const angle = Math.atan2(player.dirY, player.dirX);
+        const mouthOpen = 0.35 + 0.25*Math.sin(player.mouth);
+        ctx.fillStyle = '#ffcc00';
+        ctx.beginPath();
+        ctx.moveTo(player.x, player.y);
+        ctx.arc(player.x, player.y, 8, angle + mouthOpen, angle + (Math.PI*2 - mouthOpen));
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function drawGhost(){
+        ctx.fillStyle = '#ff4d6d';
+        ctx.beginPath();
+        ctx.arc(ghost.x, ghost.y, 8, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      function drawHUD(){
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.font = '14px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+        ctx.fillText(`Score: ${player.score}`, 12, 18);
+      }
+
+      function stepGhost(){
+        const dirs = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}];
+
+        const atCenter =
+          (Math.abs((ghost.x % TILE) - TILE/2) < 1.2) &&
+          (Math.abs((ghost.y % TILE) - TILE/2) < 1.2);
+
+        if (atCenter){
+          const best = dirs
+            .map(d => {
+              const nx = ghost.x + d.x*TILE;
+              const ny = ghost.y + d.y*TILE;
+              if (!canMove(nx, ny)) return null;
+              const dist = (player.x - nx)**2 + (player.y - ny)**2;
+              return {d, dist};
+            })
+            .filter(Boolean)
+            .sort((a,b) => a.dist - b.dist)[0];
+
+          if (best){
+            ghost.dirX = best.d.x;
+            ghost.dirY = best.d.y;
+          }
+        }
+
+        const nx = ghost.x + ghost.dirX*ghost.speed;
+        const ny = ghost.y + ghost.dirY*ghost.speed;
+        if (canMove(nx, ny)){
+          ghost.x = nx; ghost.y = ny;
+        } else {
+          ghost.dirX *= -1; ghost.dirY *= -1;
+        }
+      }
+
+      function stepPlayer(){
+        const nextNX = player.x + player.nextX*player.speed;
+        const nextNY = player.y + player.nextY*player.speed;
+
+        if (canMove(nextNX, nextNY)){
+          player.dirX = player.nextX;
+          player.dirY = player.nextY;
+        }
+
+        const nx = player.x + player.dirX*player.speed;
+        const ny = player.y + player.dirY*player.speed;
+
+        if (canMove(nx, ny)){
+          player.x = nx; player.y = ny;
+        }
+
+        player.mouth += 0.25;
+        eatPellet();
+      }
+
+      function checkCollision(){
+        const dx = player.x - ghost.x;
+        const dy = player.y - ghost.y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < 12){
+          resetGame();
+        }
+      }
+
+      function tick(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        stepPlayer();
+        stepGhost();
+        checkCollision();
+
+        drawMap();
+        drawGhost();
+        drawPlayer();
+        drawHUD();
+
+        raf = requestAnimationFrame(tick);
+      }
+
+      function openModal(){
+        if (isOpen) return;
+        isOpen = true;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        if (!raf) tick();
+      }
+
+      function closeModal(){
+        if (!isOpen) return;
+        isOpen = false;
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        if (raf){
+          cancelAnimationFrame(raf);
+          raf = null;
+        }
+      }
+
+      triggerBtn.addEventListener('click', openModal);
+
+      closeBtn.addEventListener('click', closeModal);
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (!isOpen) return;
+
+        if (e.key === 'Escape') closeModal();
+        if (e.key.toLowerCase() === 'r') resetGame();
+
+        if (e.key === 'ArrowUp') { player.nextX = 0; player.nextY = -1; }
+        if (e.key === 'ArrowDown') { player.nextX = 0; player.nextY = 1; }
+        if (e.key === 'ArrowLeft') { player.nextX = -1; player.nextY = 0; }
+        if (e.key === 'ArrowRight') { player.nextX = 1; player.nextY = 0; }
+      });
+    })();
   </script>
 </body>
 </html>
