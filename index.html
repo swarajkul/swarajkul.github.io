@@ -834,30 +834,33 @@
     };
   }
 
-    // Mouse interaction (subtle)
+      // Mouse / touch interaction (subtle)
+  const hero = document.querySelector('.hero');
   let mouse = { x: null, y: null };
 
-  canvas.addEventListener('mousemove', (e) => {
+  function setMouseFromEvent(clientX, clientY){
     const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
+    mouse.x = clientX - rect.left;
+    mouse.y = clientY - rect.top;
+  }
+
+  hero.addEventListener('mousemove', (e) => {
+    setMouseFromEvent(e.clientX, e.clientY);
   });
 
-  canvas.addEventListener('mouseleave', () => {
+  hero.addEventListener('mouseleave', () => {
     mouse.x = null;
     mouse.y = null;
   });
 
-  // Touch support (optional): gentle interaction on finger drag
-  canvas.addEventListener('touchmove', (e) => {
-    const t = e.touches[0];
+  // Touch support (drag on hero)
+  hero.addEventListener('touchmove', (e) => {
+    const t = e.touches && e.touches[0];
     if (!t) return;
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = t.clientX - rect.left;
-    mouse.y = t.clientY - rect.top;
+    setMouseFromEvent(t.clientX, t.clientY);
   }, { passive: true });
 
-  canvas.addEventListener('touchend', () => {
+  hero.addEventListener('touchend', () => {
     mouse.x = null;
     mouse.y = null;
   });
