@@ -442,6 +442,8 @@
       transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, opacity 180ms ease;
       z-index: 1500;
       opacity: 0.6;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .easter-egg-btn:hover {
@@ -495,6 +497,8 @@
       padding: 0.35rem 0.6rem;
       cursor: pointer;
       transition: transform 180ms ease, box-shadow 180ms ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .pacman-close:hover{
@@ -507,6 +511,7 @@
       height: auto;
       display: block;
       background: #05070f;
+      touch-action: none; /* avoid swipe scroll while playing */
     }
 
     .pacman-help{
@@ -519,6 +524,50 @@
       background: var(--bg-main);
       border-top: 1px solid var(--border-color);
       font-size: 0.95rem;
+    }
+
+    /* ===== Mobile D-pad controls ===== */
+    .pacman-controls{
+      display: none;
+      gap: 0.6rem;
+      padding: 0.9rem 1rem 1.1rem;
+      background: var(--bg-main);
+      border-top: 1px solid var(--border-color);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .pacman-controls .pad-row{
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .pad-btn{
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-light);
+      color: var(--text-dark);
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .pad-btn:active{
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    @media (max-width: 768px){
+      .pacman-controls{ display: flex; }
+      .pacman-help{ display: none; } /* avoid clutter on small screens */
     }
   </style>
 </head>
@@ -773,6 +822,16 @@
 
       <canvas id="pacmanCanvas" width="560" height="420"></canvas>
 
+      <!-- Mobile Controls -->
+      <div class="pacman-controls" aria-label="Pac-Man touch controls">
+        <button class="pad-btn" data-dir="up" aria-label="Move up">▲</button>
+        <div class="pad-row">
+          <button class="pad-btn" data-dir="left" aria-label="Move left">◀</button>
+          <button class="pad-btn" data-dir="down" aria-label="Move down">▼</button>
+          <button class="pad-btn" data-dir="right" aria-label="Move right">▶</button>
+        </div>
+      </div>
+
       <div class="pacman-help">
         <span><b>Controls:</b> Arrow keys</span>
         <span><b>ESC</b> to close</span>
@@ -815,7 +874,6 @@
 
     /* ===== DARK MODE TOGGLE (persist + system default) ===== */
     const toggleBtn = document.getElementById("themeToggle");
-
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
@@ -837,7 +895,7 @@
     });
 
     /* ==========================
-       Pac-Man Easter Egg
+       Pac-Man Easter Egg (Mobile-ready)
        Opens via bottom-right button
        ========================== */
     (() => {
@@ -850,70 +908,79 @@
       let isOpen = false;
       let raf = null;
 
+      // Base game grid (logical units)
       const TILE = 20;
-      const COLS = 28; // 560 / 20
-      const ROWS = 21; // 420 / 20
+      const COLS = 28;
+      const ROWS = 21;
 
-      function makeMap(){
-  // 0 = path, 1 = wall, 2 = pellet
+      // --- HiDPI / responsive canvas (mobile friendly)
+      function resizeCanvasForDPR(){
+        const dpr = window.devicePixelRatio || 1;
 
-  // 1) Build walls + paths (NO pellets yet)
-  const m = Array.from({length: ROWS}, (_, r) =>
-    Array.from({length: COLS}, (_, c) => {
-      const border = (r === 0 || r === ROWS-1 || c === 0 || c === COLS-1);
-      if (border) return 1;
+        const cssWidth = canvas.clientWidth || 560;
+        const cssHeight = Math.round(cssWidth * (420/560));
 
-      if ((r % 4 === 0 && c > 2 && c < COLS-3) || (c % 6 === 0 && r > 2 && r < ROWS-3)) {
-        return 1;
+        canvas.style.height = cssHeight + "px";
+
+        canvas.width = Math.floor(cssWidth * dpr);
+        canvas.height = Math.floor(cssHeight * dpr);
+
+        // Draw in CSS pixel coordinates
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
-      return 0; // path (not pellet)
-    })
-  );
+      // Map: 0 path, 1 wall, 2 pellet (pellets only reachable)
+      function makeMap(){
+        const m = Array.from({length: ROWS}, (_, r) =>
+          Array.from({length: COLS}, (_, c) => {
+            const border = (r === 0 || r === ROWS-1 || c === 0 || c === COLS-1);
+            if (border) return 1;
+            if ((r % 4 === 0 && c > 2 && c < COLS-3) || (c % 6 === 0 && r > 2 && r < ROWS-3)) return 1;
+            return 0; // path (no pellet yet)
+          })
+        );
 
-  // 2) Carve your lanes (same as before)
-  for (let r=1; r<ROWS-1; r++){
-    m[r][Math.floor(COLS/2)] = 0;
-  }
-  for (let c=1; c<COLS-1; c++){
-    m[Math.floor(ROWS/2)][c] = 0;
-  }
+        // Lanes
+        for (let r=1; r<ROWS-1; r++){
+          m[r][Math.floor(COLS/2)] = 0;
+        }
+        for (let c=1; c<COLS-1; c++){
+          m[Math.floor(ROWS/2)][c] = 0;
+        }
 
-  // 3) Ensure spawn / endpoints are open (same as before)
-  m[1][1] = 0; m[1][2] = 0; m[2][1] = 0;
-  m[ROWS-2][COLS-2] = 0;
+        // Spawn / endpoint open
+        m[1][1] = 0; m[1][2] = 0; m[2][1] = 0;
+        m[ROWS-2][COLS-2] = 0;
 
-  // 4) Flood-fill from spawn to find reachable tiles
-  const reachable = Array.from({length: ROWS}, () => Array(COLS).fill(false));
-  const q = [{ r: 1, c: 1 }];
-  reachable[1][1] = true;
+        // Flood-fill to keep pellets reachable
+        const reachable = Array.from({length: ROWS}, () => Array(COLS).fill(false));
+        const q = [{ r: 1, c: 1 }];
+        reachable[1][1] = true;
+        const dirs = [{dr:1,dc:0},{dr:-1,dc:0},{dr:0,dc:1},{dr:0,dc:-1}];
 
-  const dirs = [{dr:1,dc:0},{dr:-1,dc:0},{dr:0,dc:1},{dr:0,dc:-1}];
+        while (q.length){
+          const { r, c } = q.shift();
+          for (const { dr, dc } of dirs){
+            const nr = r + dr, nc = c + dc;
+            if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
+            if (reachable[nr][nc]) continue;
+            if (m[nr][nc] === 1) continue;
+            reachable[nr][nc] = true;
+            q.push({ r: nr, c: nc });
+          }
+        }
 
-  while (q.length){
-    const { r, c } = q.shift();
-    for (const { dr, dc } of dirs){
-      const nr = r + dr, nc = c + dc;
-      if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
-      if (reachable[nr][nc]) continue;
-      if (m[nr][nc] === 1) continue; // wall
-      reachable[nr][nc] = true;
-      q.push({ r: nr, c: nc });
-    }
-  }
+        for (let r=0; r<ROWS; r++){
+          for (let c=0; c<COLS; c++){
+            if (m[r][c] === 0 && reachable[r][c]) m[r][c] = 2;
+          }
+        }
 
-  // 5) Put pellets ONLY on reachable path tiles
-  for (let r=0; r<ROWS; r++){
-    for (let c=0; c<COLS; c++){
-      if (m[r][c] === 0 && reachable[r][c]) m[r][c] = 2;
-    }
-  }
+        // Keep spawn clear
+        m[1][1] = 0; m[1][2] = 0; m[2][1] = 0;
 
-  // Optional: keep spawn tiles empty
-  m[1][1] = 0; m[1][2] = 0; m[2][1] = 0;
-
-  return m;
-}
+        return m;
+      }
 
       let map = makeMap();
 
@@ -946,6 +1013,22 @@
         ghost.y = (ROWS-2)*TILE + TILE/2;
         ghost.dirX = -1; ghost.dirY = 0;
       }
+
+      function setDir(dir){
+        if (dir === 'up')    { player.nextX = 0;  player.nextY = -1; }
+        if (dir === 'down')  { player.nextX = 0;  player.nextY =  1; }
+        if (dir === 'left')  { player.nextX = -1; player.nextY =  0; }
+        if (dir === 'right') { player.nextX = 1;  player.nextY =  0; }
+      }
+
+      // Touch D-pad controls (mobile)
+      document.querySelectorAll('.pad-btn').forEach(btn => {
+        const dir = btn.getAttribute('data-dir');
+        btn.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          setDir(dir);
+        });
+      });
 
       function tileAt(px, py){
         const c = Math.floor(px / TILE);
@@ -1081,7 +1164,10 @@
       }
 
       function tick(){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Clear in CSS pixels
+        const w = canvas.clientWidth || 560;
+        const h = (canvas.clientHeight || 420);
+        ctx.clearRect(0, 0, w, h);
 
         stepPlayer();
         stepGhost();
@@ -1100,6 +1186,13 @@
         isOpen = true;
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
+
+        // Prevent background scroll on mobile
+        document.body.style.overflow = 'hidden';
+
+        // Resize for mobile + retina
+        resizeCanvasForDPR();
+
         if (!raf) tick();
       }
 
@@ -1108,6 +1201,9 @@
         isOpen = false;
         modal.classList.remove('open');
         modal.setAttribute('aria-hidden', 'true');
+
+        document.body.style.overflow = '';
+
         if (raf){
           cancelAnimationFrame(raf);
           raf = null;
@@ -1115,11 +1211,14 @@
       }
 
       triggerBtn.addEventListener('click', openModal);
-
       closeBtn.addEventListener('click', closeModal);
 
       modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
+      });
+
+      window.addEventListener('resize', () => {
+        if (isOpen) resizeCanvasForDPR();
       });
 
       window.addEventListener('keydown', (e) => {
@@ -1128,10 +1227,10 @@
         if (e.key === 'Escape') closeModal();
         if (e.key.toLowerCase() === 'r') resetGame();
 
-        if (e.key === 'ArrowUp') { player.nextX = 0; player.nextY = -1; }
-        if (e.key === 'ArrowDown') { player.nextX = 0; player.nextY = 1; }
-        if (e.key === 'ArrowLeft') { player.nextX = -1; player.nextY = 0; }
-        if (e.key === 'ArrowRight') { player.nextX = 1; player.nextY = 0; }
+        if (e.key === 'ArrowUp') setDir('up');
+        if (e.key === 'ArrowDown') setDir('down');
+        if (e.key === 'ArrowLeft') setDir('left');
+        if (e.key === 'ArrowRight') setDir('right');
       });
     })();
   </script>
