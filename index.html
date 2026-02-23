@@ -772,13 +772,15 @@
   let raf = null;
 
   const CONFIG = {
-    density: 0.00008,
-    maxParticles: 70,
-    speed: 0.35,
-    linkDist: 110,
-    radiusMin: 1,
-    radiusMax: 2.2
-  };
+  density: 0.00007,      // slightly fewer particles
+  maxParticles: 65,
+  speed: 0.30,
+  linkDist: 100,
+  radiusMin: 1,
+  radiusMax: 2,
+  mouseRadius: 120,      // interaction radius
+  repelStrength: 0.06
+};
 
   function isDark(){
     return document.body.classList.contains('dark');
@@ -805,6 +807,13 @@
       Math.floor(w * h * CONFIG.density)
     );
 
+        // Mobile tuning
+    if (window.innerWidth < 768){
+      CONFIG.linkDist = 85;
+    } else {
+      CONFIG.linkDist = 100;
+    }
+
     particles = [];
     for (let i = 0; i < targetCount; i++){
       particles.push(makeParticle());
@@ -825,11 +834,39 @@
     };
   }
 
+    // Mouse interaction (subtle)
+  let mouse = { x: null, y: null };
+
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
+  // Touch support (optional): gentle interaction on finger drag
+  canvas.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    if (!t) return;
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = t.clientX - rect.left;
+    mouse.y = t.clientY - rect.top;
+  }, { passive: true });
+
+  canvas.addEventListener('touchend', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
   function step(){
     ctx.clearRect(0, 0, w, h);
     const { dot, line } = colors();
 
-    for (const p of particles){
+        for (const p of particles){
       p.x += p.vx;
       p.y += p.vy;
 
@@ -837,8 +874,20 @@
       if (p.x > w + 10) p.x = -10;
       if (p.y < -10) p.y = h + 10;
       if (p.y > h + 10) p.y = -10;
-    }
 
+      // Subtle repel near pointer
+      if (mouse.x !== null){
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        if (dist < CONFIG.mouseRadius && dist > 0.001){
+          const force = (CONFIG.mouseRadius - dist) / CONFIG.mouseRadius;
+          p.x += (dx / dist) * force * CONFIG.repelStrength * 18;
+          p.y += (dy / dist) * force * CONFIG.repelStrength * 18;
+        }
+      }
+    }
     // Draw lines
     ctx.strokeStyle = line;
     for (let i = 0; i < particles.length; i++){
@@ -849,7 +898,7 @@
         const dist = Math.sqrt(dx*dx + dy*dy);
 
         if (dist < CONFIG.linkDist){
-          ctx.globalAlpha = 1 - (dist / CONFIG.linkDist);
+          ctx.globalAlpha = (1 - (dist / CONFIG.linkDist)) * 0.6;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
