@@ -140,6 +140,7 @@
       text-align: center;
     }
 
+    /* Optional: slightly deeper hero in dark mode */
     body.dark .hero {
       background: linear-gradient(135deg, #1d4ed8 0%, #6d28d9 100%);
     }
@@ -157,7 +158,7 @@
       text-decoration: none;
       border-radius: var(--radius);
       font-weight: 600;
-      margin: 0; /* spacing controlled via gap */
+      margin: 0; /* premium: spacing controlled via flex gap */
       box-shadow: var(--shadow-sm);
       transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
       will-change: transform;
@@ -179,6 +180,7 @@
       color: var(--primary-color);
     }
 
+    /* Outline default (good on light sections) */
     .btn-outline {
       background: transparent;
       border: 2px solid var(--primary-color);
@@ -191,6 +193,7 @@
       background: rgba(37, 99, 235, 0.08);
     }
 
+    /* Outline in hero (white outline) */
     .hero .btn-outline {
       border-color: white;
       color: white;
@@ -200,6 +203,7 @@
       background: rgba(255,255,255,0.12);
     }
 
+    /* CTA wrappers */
     .hero-cta,
     .contact-cta {
       display: flex;
@@ -230,6 +234,7 @@
       letter-spacing: -0.02em;
     }
 
+    /* Lead text utility */
     .lead {
       font-size: 1.1rem;
       color: var(--text-light);
@@ -423,131 +428,6 @@
     }
 
     html { scroll-behavior: smooth; }
-
-    /* ===== Easter Egg Floating Button ===== */
-    .easter-egg-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1px solid var(--border-color);
-      background: var(--bg-light);
-      color: var(--text-dark);
-      font-weight: 700;
-      font-size: 1.1rem;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, opacity 180ms ease;
-      z-index: 1500;
-      opacity: 0.6;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .easter-egg-btn:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: var(--shadow-md);
-      opacity: 1;
-    }
-
-    /* ===== Pac-Man modal ===== */
-    .pacman-modal{
-      position: fixed;
-      inset: 0;
-      display: none;
-      place-items: center;
-      background: rgba(0,0,0,0.6);
-      z-index: 2000;
-      padding: 1rem;
-    }
-
-    .pacman-modal.open{ display: grid; }
-
-    /* --- Mobile-first modal sizing + layout --- */
-.pacman-dialog{
-  width: min(720px, 96vw);
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-}
-
-/* Header stays fixed height */
-.pacman-header{ flex: 0 0 auto; }
-
-/* Canvas area becomes flexible and centers the canvas */
-.pacman-stage{
-  flex: 1 1 auto;
-  display: grid;
-  place-items: center;
-  padding: 10px;
-  background: var(--bg-main);
-}
-
-/* Make canvas fit height/width without cropping */
-#pacmanCanvas{
-  width: 100%;
-  max-width: 680px;
-  height: auto;
-  max-height: 48vh;            /* key: prevents canvas from stealing whole modal */
-  display: block;
-  border-radius: 12px;
-  background: #05070f;
-}
-
-/* Put controls at bottom; don't let them take huge space */
-.pacman-controls{
-  flex: 0 0 auto;
-  padding: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  border-top: 1px solid var(--border-color);
-  background: var(--bg-light);
-}
-
-/* Compact d-pad */
-.pad-btn{
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-main);
-  color: var(--text-dark);
-  font-size: 1.1rem;
-  font-weight: 800;
-  box-shadow: var(--shadow-sm);
-}
-
-.pacman-controls .pad-row{ display: flex; gap: 10px; }
-
-/* Hide desktop help on small screens */
-@media (max-width: 768px){
-  .pacman-help{ display: none; }
-}
-
-/* EXTRA: For very small screens, shrink buttons a bit more */
-@media (max-width: 380px){
-  #pacmanCanvas{ max-height: 44vh; }
-  .pad-btn{ width: 46px; height: 46px; border-radius: 12px; }
-}
-
-    .pad-btn:active{
-      transform: translateY(1px);
-      box-shadow: none;
-    }
-
-    @media (max-width: 768px){
-      .pacman-controls{ display: flex; }
-      .pacman-help{ display: none; } /* avoid clutter on small screens */
-    }
   </style>
 </head>
 
@@ -788,37 +668,6 @@
     <p style="margin-top: 0.5rem; opacity: 0.8;">Built with passion for data and insights</p>
   </footer>
 
-  <!-- Easter Egg Button -->
-  <button id="pacmanTrigger" class="easter-egg-btn" aria-label="Secret Game">🎮</button>
-
-  <!-- Pac-Man Easter Egg Modal -->
-  <div id="pacmanModal" class="pacman-modal" aria-hidden="true">
-    <div class="pacman-dialog" role="dialog" aria-modal="true" aria-label="Pac-Man Easter Egg">
-      <div class="pacman-header">
-        <div class="pacman-title">Pac-Man (Easter Egg)</div>
-        <button id="pacmanClose" class="pacman-close" aria-label="Close Pac-Man">✕</button>
-      </div>
-
-      <canvas id="pacmanCanvas" width="560" height="420"></canvas>
-
-      <!-- Mobile Controls -->
-      <div class="pacman-controls" aria-label="Pac-Man touch controls">
-        <button class="pad-btn" data-dir="up" aria-label="Move up">▲</button>
-        <div class="pad-row">
-          <button class="pad-btn" data-dir="left" aria-label="Move left">◀</button>
-          <button class="pad-btn" data-dir="down" aria-label="Move down">▼</button>
-          <button class="pad-btn" data-dir="right" aria-label="Move right">▶</button>
-        </div>
-      </div>
-
-      <div class="pacman-help">
-        <span><b>Controls:</b> Arrow keys</span>
-        <span><b>ESC</b> to close</span>
-        <span><b>R</b> to restart</span>
-      </div>
-    </div>
-  </div>
-
   <script>
     function toggleMenu() {
       const menu = document.getElementById('navMenu');
@@ -853,6 +702,8 @@
 
     /* ===== DARK MODE TOGGLE (persist + system default) ===== */
     const toggleBtn = document.getElementById("themeToggle");
+
+    // Initial theme: saved preference OR system preference
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
@@ -872,346 +723,6 @@
         toggleBtn.textContent = "🌙";
       }
     });
-
-    /* ==========================
-       Pac-Man Easter Egg (Mobile-ready)
-       Opens via bottom-right button
-       ========================== */
-    (() => {
-      const modal = document.getElementById('pacmanModal');
-      const closeBtn = document.getElementById('pacmanClose');
-      const triggerBtn = document.getElementById('pacmanTrigger');
-      const canvas = document.getElementById('pacmanCanvas');
-      const ctx = canvas.getContext('2d');
-
-      let isOpen = false;
-      let raf = null;
-
-      // Base game grid (logical units)
-      const TILE = 20;
-      const COLS = 28;
-      const ROWS = 21;
-
-      // --- HiDPI / responsive canvas (mobile friendly)
-      function resizeCanvasForDPR(){
-        const dpr = window.devicePixelRatio || 1;
-
-        const cssWidth = canvas.clientWidth || 560;
-        const cssHeight = Math.round(cssWidth * (420/560));
-
-        canvas.style.height = cssHeight + "px";
-
-        canvas.width = Math.floor(cssWidth * dpr);
-        canvas.height = Math.floor(cssHeight * dpr);
-
-        // Draw in CSS pixel coordinates
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      }
-
-      // Map: 0 path, 1 wall, 2 pellet (pellets only reachable)
-      function makeMap(){
-        const m = Array.from({length: ROWS}, (_, r) =>
-          Array.from({length: COLS}, (_, c) => {
-            const border = (r === 0 || r === ROWS-1 || c === 0 || c === COLS-1);
-            if (border) return 1;
-            if ((r % 4 === 0 && c > 2 && c < COLS-3) || (c % 6 === 0 && r > 2 && r < ROWS-3)) return 1;
-            return 0; // path (no pellet yet)
-          })
-        );
-
-        // Lanes
-        for (let r=1; r<ROWS-1; r++){
-          m[r][Math.floor(COLS/2)] = 0;
-        }
-        for (let c=1; c<COLS-1; c++){
-          m[Math.floor(ROWS/2)][c] = 0;
-        }
-
-        // Spawn / endpoint open
-        m[1][1] = 0; m[1][2] = 0; m[2][1] = 0;
-        m[ROWS-2][COLS-2] = 0;
-
-        // Flood-fill to keep pellets reachable
-        const reachable = Array.from({length: ROWS}, () => Array(COLS).fill(false));
-        const q = [{ r: 1, c: 1 }];
-        reachable[1][1] = true;
-        const dirs = [{dr:1,dc:0},{dr:-1,dc:0},{dr:0,dc:1},{dr:0,dc:-1}];
-
-        while (q.length){
-          const { r, c } = q.shift();
-          for (const { dr, dc } of dirs){
-            const nr = r + dr, nc = c + dc;
-            if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
-            if (reachable[nr][nc]) continue;
-            if (m[nr][nc] === 1) continue;
-            reachable[nr][nc] = true;
-            q.push({ r: nr, c: nc });
-          }
-        }
-
-        for (let r=0; r<ROWS; r++){
-          for (let c=0; c<COLS; c++){
-            if (m[r][c] === 0 && reachable[r][c]) m[r][c] = 2;
-          }
-        }
-
-        // Keep spawn clear
-        m[1][1] = 0; m[1][2] = 0; m[2][1] = 0;
-
-        return m;
-      }
-
-      let map = makeMap();
-
-      const player = {
-        x: 1 * TILE + TILE/2,
-        y: 1 * TILE + TILE/2,
-        dirX: 1, dirY: 0,
-        nextX: 1, nextY: 0,
-        speed: 2.2,
-        mouth: 0,
-        score: 0
-      };
-
-      const ghost = {
-        x: (COLS-2) * TILE + TILE/2,
-        y: (ROWS-2) * TILE + TILE/2,
-        dirX: -1, dirY: 0,
-        speed: 1.9
-      };
-
-      function resetGame(){
-        map = makeMap();
-        player.x = 1*TILE + TILE/2;
-        player.y = 1*TILE + TILE/2;
-        player.dirX = 1; player.dirY = 0;
-        player.nextX = 1; player.nextY = 0;
-        player.score = 0;
-
-        ghost.x = (COLS-2)*TILE + TILE/2;
-        ghost.y = (ROWS-2)*TILE + TILE/2;
-        ghost.dirX = -1; ghost.dirY = 0;
-      }
-
-      function setDir(dir){
-        if (dir === 'up')    { player.nextX = 0;  player.nextY = -1; }
-        if (dir === 'down')  { player.nextX = 0;  player.nextY =  1; }
-        if (dir === 'left')  { player.nextX = -1; player.nextY =  0; }
-        if (dir === 'right') { player.nextX = 1;  player.nextY =  0; }
-      }
-
-      // Touch D-pad controls (mobile)
-      document.querySelectorAll('.pad-btn').forEach(btn => {
-        const dir = btn.getAttribute('data-dir');
-        btn.addEventListener('pointerdown', (e) => {
-          e.preventDefault();
-          setDir(dir);
-        });
-      });
-
-      function tileAt(px, py){
-        const c = Math.floor(px / TILE);
-        const r = Math.floor(py / TILE);
-        if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return 1;
-        return map[r][c];
-      }
-
-      function canMove(px, py){
-        const r = 7;
-        return (
-          tileAt(px-r, py-r) !== 1 &&
-          tileAt(px+r, py-r) !== 1 &&
-          tileAt(px-r, py+r) !== 1 &&
-          tileAt(px+r, py+r) !== 1
-        );
-      }
-
-      function eatPellet(){
-        const c = Math.floor(player.x / TILE);
-        const r = Math.floor(player.y / TILE);
-        if (map[r][c] === 2){
-          map[r][c] = 0;
-          player.score += 10;
-        }
-      }
-
-      function drawMap(){
-        for (let r=0; r<ROWS; r++){
-          for (let c=0; c<COLS; c++){
-            const t = map[r][c];
-            const x = c*TILE;
-            const y = r*TILE;
-
-            if (t === 1){
-              ctx.fillStyle = '#1f4cff';
-              ctx.fillRect(x, y, TILE, TILE);
-            } else if (t === 2){
-              ctx.fillStyle = '#ffd966';
-              ctx.beginPath();
-              ctx.arc(x + TILE/2, y + TILE/2, 2.5, 0, Math.PI*2);
-              ctx.fill();
-            }
-          }
-        }
-      }
-
-      function drawPlayer(){
-        const angle = Math.atan2(player.dirY, player.dirX);
-        const mouthOpen = 0.35 + 0.25*Math.sin(player.mouth);
-        ctx.fillStyle = '#ffcc00';
-        ctx.beginPath();
-        ctx.moveTo(player.x, player.y);
-        ctx.arc(player.x, player.y, 8, angle + mouthOpen, angle + (Math.PI*2 - mouthOpen));
-        ctx.closePath();
-        ctx.fill();
-      }
-
-      function drawGhost(){
-        ctx.fillStyle = '#ff4d6d';
-        ctx.beginPath();
-        ctx.arc(ghost.x, ghost.y, 8, 0, Math.PI*2);
-        ctx.fill();
-      }
-
-      function drawHUD(){
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.font = '14px system-ui, -apple-system, Segoe UI, Roboto, Arial';
-        ctx.fillText(`Score: ${player.score}`, 12, 18);
-      }
-
-      function stepGhost(){
-        const dirs = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}];
-
-        const atCenter =
-          (Math.abs((ghost.x % TILE) - TILE/2) < 1.2) &&
-          (Math.abs((ghost.y % TILE) - TILE/2) < 1.2);
-
-        if (atCenter){
-          const best = dirs
-            .map(d => {
-              const nx = ghost.x + d.x*TILE;
-              const ny = ghost.y + d.y*TILE;
-              if (!canMove(nx, ny)) return null;
-              const dist = (player.x - nx)**2 + (player.y - ny)**2;
-              return {d, dist};
-            })
-            .filter(Boolean)
-            .sort((a,b) => a.dist - b.dist)[0];
-
-          if (best){
-            ghost.dirX = best.d.x;
-            ghost.dirY = best.d.y;
-          }
-        }
-
-        const nx = ghost.x + ghost.dirX*ghost.speed;
-        const ny = ghost.y + ghost.dirY*ghost.speed;
-        if (canMove(nx, ny)){
-          ghost.x = nx; ghost.y = ny;
-        } else {
-          ghost.dirX *= -1; ghost.dirY *= -1;
-        }
-      }
-
-      function stepPlayer(){
-        const nextNX = player.x + player.nextX*player.speed;
-        const nextNY = player.y + player.nextY*player.speed;
-
-        if (canMove(nextNX, nextNY)){
-          player.dirX = player.nextX;
-          player.dirY = player.nextY;
-        }
-
-        const nx = player.x + player.dirX*player.speed;
-        const ny = player.y + player.dirY*player.speed;
-
-        if (canMove(nx, ny)){
-          player.x = nx; player.y = ny;
-        }
-
-        player.mouth += 0.25;
-        eatPellet();
-      }
-
-      function checkCollision(){
-        const dx = player.x - ghost.x;
-        const dy = player.y - ghost.y;
-        const d = Math.sqrt(dx*dx + dy*dy);
-        if (d < 12){
-          resetGame();
-        }
-      }
-
-      function tick(){
-        // Clear in CSS pixels
-        const w = canvas.clientWidth || 560;
-        const h = (canvas.clientHeight || 420);
-        ctx.clearRect(0, 0, w, h);
-
-        stepPlayer();
-        stepGhost();
-        checkCollision();
-
-        drawMap();
-        drawGhost();
-        drawPlayer();
-        drawHUD();
-
-        raf = requestAnimationFrame(tick);
-      }
-
-      function openModal(){
-        if (isOpen) return;
-        isOpen = true;
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-
-        // Prevent background scroll on mobile
-        document.body.style.overflow = 'hidden';
-
-        // Resize for mobile + retina
-        resizeCanvasForDPR();
-
-        if (!raf) tick();
-      }
-
-      function closeModal(){
-        if (!isOpen) return;
-        isOpen = false;
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-
-        document.body.style.overflow = '';
-
-        if (raf){
-          cancelAnimationFrame(raf);
-          raf = null;
-        }
-      }
-
-      triggerBtn.addEventListener('click', openModal);
-      closeBtn.addEventListener('click', closeModal);
-
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-      });
-
-      window.addEventListener('resize', () => {
-        if (isOpen) resizeCanvasForDPR();
-      });
-
-      window.addEventListener('keydown', (e) => {
-        if (!isOpen) return;
-
-        if (e.key === 'Escape') closeModal();
-        if (e.key.toLowerCase() === 'r') resetGame();
-
-        if (e.key === 'ArrowUp') setDir('up');
-        if (e.key === 'ArrowDown') setDir('down');
-        if (e.key === 'ArrowLeft') setDir('left');
-        if (e.key === 'ArrowRight') setDir('right');
-      });
-    })();
   </script>
 </body>
 </html>
