@@ -1,702 +1,728 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Swaraj Kulkarni - Data Analyst & Data Scientist specializing in Machine Learning, Data Engineering, and Business Intelligence">
-    <title>Swaraj Kulkarni | Data Analyst & Data Scientist</title>
-
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --bg-light: #f9fafb;
-            --border-color: #e5e7eb;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: white;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-
-        nav .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav a:hover { color: var(--primary-color); }
-
-        /* Mobile menu toggle */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: var(--text-dark);
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-        /* Hero Section */
-        .hero {
-            margin-top: 70px;
-            padding: 5rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-        }
-
-        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
-
-        .hero .subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            opacity: 0.9;
-        }
-
-        .hero .contact-info {
-            font-size: 1rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .hero .contact-info a {
-            color: white;
-            text-decoration: none;
-            margin: 0 0.5rem;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 2rem;
-            background: white;
-            color: var(--primary-color);
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: transform 0.3s;
-            margin: 0.5rem;
-        }
-
-        .btn:hover { transform: translateY(-2px); }
-
-        /* Explicit primary class to match your HTML usage */
-        .btn-primary {
-            background: white;
-            color: var(--primary-color);
-        }
-
-        /* Base outline button for light sections (Contact, etc.) */
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        /* Outline button inside hero (white outline) */
-        .hero .btn-outline {
-            border-color: white;
-            color: white;
-        }
-
-        /* CTA wrappers */
-        .hero-cta,
-        .contact-cta {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
-
-        section {
-            margin-bottom: 4rem;
-            scroll-margin-top: 90px; /* prevents fixed nav overlap on anchor links */
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--text-dark);
-            border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 0.5rem;
-            display: inline-block;
-        }
-
-        /* Lead text utility (replaces inline About styling) */
-        .lead {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            line-height: 1.8;
-            max-width: 900px;
-        }
-
-        /* Education */
-        .education-item {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: var(--bg-light);
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .education-item h3 {
-            font-size: 1.5rem;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .education-item .meta {
-            color: var(--text-light);
-            margin-bottom: 0.75rem;
-        }
-
-        .education-item ul {
-            margin-left: 1.5rem;
-            color: var(--text-light);
-        }
-
-        /* Experience */
-        .experience-item {
-            margin-bottom: 2.5rem;
-            padding: 2rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .experience-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .experience-item h3 {
-            font-size: 1.5rem;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .experience-item .company {
-            color: var(--primary-color);
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .experience-item .meta {
-            color: var(--text-light);
-            margin-bottom: 1rem;
-        }
-
-        .experience-item ul { margin-left: 1.5rem; }
-
-        .experience-item li {
-            margin-bottom: 0.75rem;
-            color: var(--text-light);
-        }
-
-        /* Projects */
-        .project-item {
-            margin-bottom: 2rem;
-            padding: 2rem;
-            background: var(--bg-light);
-            border-radius: 8px;
-            border-left: 4px solid var(--secondary-color);
-        }
-
-        .project-item h3 {
-            font-size: 1.5rem;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-        }
-
-        .project-item p {
-            color: var(--text-light);
-            line-height: 1.8;
-        }
-
-        /* Skills */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-category {
-            padding: 1.5rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .skill-category h3 {
-            font-size: 1.3rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        .skill-category p {
-            color: var(--text-light);
-            line-height: 1.8;
-        }
-
-        /* Contact */
-        .contact-section { text-align: center; }
-
-        .contact-text {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            margin-bottom: 2rem;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--text-dark);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            nav ul {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: white;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                padding: 1rem;
-            }
-
-            nav ul.active { display: flex; }
-            .menu-toggle { display: flex; }
-
-            .hero h1 { font-size: 2rem; }
-            .hero .subtitle { font-size: 1.2rem; }
-            h2 { font-size: 2rem; }
-            .skills-grid { grid-template-columns: 1fr; }
-        }
-
-        /* Slightly softer radius + consistent motion */
-        :root{
-          --radius: 10px;
-          --shadow-sm: 0 6px 16px rgba(17, 24, 39, 0.10);
-          --shadow-md: 0 12px 28px rgba(17, 24, 39, 0.14);
-        }
-
-        /* Make section headings + cards feel cleaner */
-        h2{
-          border-bottom-width: 4px;
-          letter-spacing: -0.02em;
-        }
-
-        /* Premium focus styles (keyboard users) */
-        a:focus-visible,
-        button:focus-visible{
-          outline: 3px solid rgba(37, 99, 235, 0.35);
-          outline-offset: 3px;
-          border-radius: var(--radius);
-        }
-
-/* Buttons: elevate + subtle gloss */
-        .btn{
-          border-radius: var(--radius);
-          box-shadow: var(--shadow-sm);
-          transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-          will-change: transform;
-        }
-
-        /* Hover: lift + slightly richer shadow */
-        .btn:hover{
-          transform: translateY(-3px);
-          box-shadow: var(--shadow-md);
-          filter: brightness(1.02);
-        }
-
-        /* Active press */
-        .btn:active{
-          transform: translateY(-1px);
-          box-shadow: var(--shadow-sm);
-        }
-
-        /* Outline: a touch more refined */
-        .btn-outline{
-          box-shadow: none;                 /* outline buttons often look cleaner without shadow */
-          transition: transform 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
-        }
-    
-        .btn-outline:hover{
-          background: rgba(37, 99, 235, 0.08);
-        }
-
-        /* Hero outline hover stays premium on dark background */
-        .hero .btn-outline:hover{
-          background: rgba(255,255,255,0.12);
-        }
-
-        /* Cards (Experience / Skills) premium hover */
-        .experience-item,
-        .skill-category{
-          border-radius: 14px;
-          transition: transform 220ms ease, box-shadow 220ms ease;
-        }
-
-        .experience-item:hover,
-        .skill-category:hover{
-          transform: translateY(-6px);
-          box-shadow: var(--shadow-md);
-        }
-
-        /* Project/Education blocks: slightly more depth */
-        .project-item,
-        .education-item{
-          border-radius: 14px;
-        }
-
-        /* Subtle entrance polish: reduce motion preference respected */
-        @media (prefers-reduced-motion: reduce){
-          *{
-            transition: none !important;
-            scroll-behavior: auto !important;
-          }
-        }
-
-        /* Premium mobile tap target: keep buttons comfy */
-        @media (max-width: 768px){
-          .btn{
-            padding: 0.85rem 1.6rem;
-          }
-        }
-
-        /* Smooth scroll */
-        html { scroll-behavior: smooth; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Swaraj Kulkarni - Data Analyst & Data Scientist specializing in Machine Learning, Data Engineering, and Business Intelligence" />
+  <title>Swaraj Kulkarni | Data Analyst & Data Scientist</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ===== THEME TOKENS (LIGHT DEFAULT) ===== */
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #1e40af;
+
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+
+      --bg-main: #ffffff;
+      --bg-light: #f9fafb;
+      --border-color: #e5e7eb;
+
+      --radius: 10px;
+      --shadow-sm: 0 6px 16px rgba(17, 24, 39, 0.10);
+      --shadow-md: 0 12px 28px rgba(17, 24, 39, 0.14);
+    }
+
+    /* ===== DARK THEME OVERRIDES ===== */
+    body.dark {
+      --primary-color: #60a5fa;
+      --secondary-color: #3b82f6;
+
+      --text-dark: #f3f4f6;
+      --text-light: #9ca3af;
+
+      --bg-main: #111827;
+      --bg-light: #1f2937;
+      --border-color: #374151;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      background: var(--bg-main);
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--bg-main);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      z-index: 1000;
+      transition: background 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    nav .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      white-space: nowrap;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    nav a:hover { color: var(--primary-color); }
+
+    /* Dark mode toggle button */
+    .theme-toggle {
+      border: 1px solid var(--border-color);
+      background: var(--bg-light);
+      color: var(--text-dark);
+      border-radius: 999px;
+      padding: 0.45rem 0.6rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .theme-toggle:active {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Mobile menu toggle */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      width: 25px;
+      height: 3px;
+      background: var(--text-dark);
+      margin: 3px 0;
+      transition: 0.3s;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      margin-top: 70px;
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+    }
+
+    /* Optional: slightly deeper hero in dark mode */
+    body.dark .hero {
+      background: linear-gradient(135deg, #1d4ed8 0%, #6d28d9 100%);
+    }
+
+    .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+    .hero .subtitle { font-size: 1.5rem; margin-bottom: 1rem; opacity: 0.92; }
+    .hero .contact-info { font-size: 1rem; margin-bottom: 2rem; opacity: 0.92; }
+
+    /* ===== Buttons ===== */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background: white;
+      color: var(--primary-color);
+      text-decoration: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      margin: 0; /* premium: spacing controlled via flex gap */
+      box-shadow: var(--shadow-sm);
+      transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+      will-change: transform;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      filter: brightness(1.02);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary {
+      background: white;
+      color: var(--primary-color);
+    }
+
+    /* Outline default (good on light sections) */
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      box-shadow: none;
+      transition: transform 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
+    }
+
+    .btn-outline:hover {
+      background: rgba(37, 99, 235, 0.08);
+    }
+
+    /* Outline in hero (white outline) */
+    .hero .btn-outline {
+      border-color: white;
+      color: white;
+    }
+
+    .hero .btn-outline:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* CTA wrappers */
+    .hero-cta,
+    .contact-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ===== Container ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 90px;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: var(--text-dark);
+      border-bottom: 4px solid var(--primary-color);
+      padding-bottom: 0.5rem;
+      display: inline-block;
+      letter-spacing: -0.02em;
+    }
+
+    /* Lead text utility */
+    .lead {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      line-height: 1.8;
+      max-width: 900px;
+    }
+
+    /* ===== Education ===== */
+    .education-item {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: var(--bg-light);
+      border-radius: 14px;
+      border-left: 4px solid var(--primary-color);
+      border: 1px solid var(--border-color);
+    }
+
+    .education-item h3 {
+      font-size: 1.5rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .education-item .meta {
+      color: var(--text-light);
+      margin-bottom: 0.75rem;
+    }
+
+    .education-item ul {
+      margin-left: 1.5rem;
+      color: var(--text-light);
+    }
+
+    /* ===== Experience ===== */
+    .experience-item {
+      margin-bottom: 2.5rem;
+      padding: 2rem;
+      background: var(--bg-light);
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .experience-item:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(96, 165, 250, 0.35);
+    }
+
+    .experience-item h3 {
+      font-size: 1.5rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .experience-item .company {
+      color: var(--primary-color);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .experience-item .meta {
+      color: var(--text-light);
+      margin-bottom: 1rem;
+    }
+
+    .experience-item ul { margin-left: 1.5rem; }
+
+    .experience-item li {
+      margin-bottom: 0.75rem;
+      color: var(--text-light);
+    }
+
+    /* ===== Projects ===== */
+    .project-item {
+      margin-bottom: 2rem;
+      padding: 2rem;
+      background: var(--bg-light);
+      border-radius: 14px;
+      border-left: 4px solid var(--secondary-color);
+      border: 1px solid var(--border-color);
+    }
+
+    .project-item h3 {
+      font-size: 1.5rem;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+    }
+
+    .project-item p {
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    /* ===== Skills ===== */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .skill-category {
+      padding: 1.5rem;
+      background: var(--bg-light);
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .skill-category:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(96, 165, 250, 0.35);
+    }
+
+    .skill-category h3 {
+      font-size: 1.3rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .skill-category p {
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    /* ===== Contact ===== */
+    .contact-section { text-align: center; }
+
+    .contact-text {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      margin-bottom: 2rem;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: var(--text-dark);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    body.dark footer {
+      background: #0b1220;
+    }
+
+    footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    /* ===== Premium focus styles ===== */
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid rgba(96, 165, 250, 0.40);
+      outline-offset: 3px;
+      border-radius: var(--radius);
+    }
+
+    /* Reduce motion preference respected */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition: none !important; scroll-behavior: auto !important; }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-main);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 1rem;
+      }
+
+      nav ul.active { display: flex; }
+      .menu-toggle { display: flex; }
+
+      .hero h1 { font-size: 2rem; }
+      .hero .subtitle { font-size: 1.2rem; }
+      h2 { font-size: 2rem; }
+      .skills-grid { grid-template-columns: 1fr; }
+
+      .btn { padding: 0.85rem 1.6rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+  </style>
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <div class="logo">SK</div>
-            <div class="menu-toggle" onclick="toggleMenu()">
-                <span></span><span></span><span></span>
-            </div>
-            <ul id="navMenu">
-                <li><a href="#about">About</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <div class="logo">SK</div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Swaraj Kulkarni</h1>
-        <p class="subtitle">Data Analyst & Data Scientist</p>
-        <p class="contact-info">San Jose, California</p>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
 
-        <div class="hero-cta">
-            <a href="https://linkedin.com/in/SwarajKul"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="btn btn-primary"
-               aria-label="Visit Swaraj Kulkarni LinkedIn profile">
-                View LinkedIn
-            </a>
+      <ul id="navMenu">
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
 
-            <a href="#contact"
-               class="btn btn-outline"
-               aria-label="Scroll to contact section">
-                Contact Me
-            </a>
-        </div>
+      <!-- Dark mode toggle -->
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Swaraj Kulkarni</h1>
+    <p class="subtitle">Data Analyst & Data Scientist</p>
+    <p class="contact-info">San Jose, California</p>
+
+    <div class="hero-cta">
+      <a href="https://linkedin.com/in/SwarajKul"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="btn btn-primary"
+         aria-label="Visit Swaraj Kulkarni LinkedIn profile">
+        View LinkedIn
+      </a>
+
+      <a href="#contact"
+         class="btn btn-outline"
+         aria-label="Scroll to contact section">
+        Contact Me
+      </a>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- About Section -->
+    <section id="about">
+      <h2>About Me</h2>
+      <p class="lead">
+        I'm a data professional with expertise in data analytics, machine learning, and business intelligence.
+        Currently working as a Data Analyst at San Jose State University, I specialize in building scalable
+        data pipelines, developing predictive models, and creating interactive dashboards that drive
+        data-informed decision-making. With a Master's in Applied Data Science and hands-on experience
+        across multiple industries, I transform complex data into actionable insights.
+      </p>
     </section>
 
-    <div class="container">
-        <!-- About Section -->
-        <section id="about">
-            <h2>About Me</h2>
-            <p class="lead">
-                I'm a data professional with expertise in data analytics, machine learning, and business intelligence.
-                Currently working as a Data Analyst at San Jose State University, I specialize in building scalable
-                data pipelines, developing predictive models, and creating interactive dashboards that drive
-                data-informed decision-making. With a Master's in Applied Data Science and hands-on experience
-                across multiple industries, I transform complex data into actionable insights.
-            </p>
-        </section>
+    <!-- Experience Section -->
+    <section id="experience">
+      <h2>Professional Experience</h2>
 
-        <!-- Experience Section -->
-        <section id="experience">
-            <h2>Professional Experience</h2>
+      <div class="experience-item">
+        <h3>Data Analytics Engineer</h3>
+        <p class="company">San Jose State University, CA</p>
+        <p class="meta">Jan 2025 - Present</p>
+        <ul>
+          <li>Engineered scalable data pipelines using SQL, Apache Spark, and AWS with Python to process large datasets, reducing processing time by 30% through optimization and automation</li>
+          <li>Applied machine learning and statistical models (time-series forecasting, regression, classification) to predict enrollment demand and course overflow risk, improving planning accuracy and minimizing last-minute schedule changes</li>
+          <li>Designed interactive Tableau and Looker dashboards with KPI reporting for stakeholder data storytelling, enabling 25% faster decision-making across departments and supporting $500K+ resource reallocation</li>
+        </ul>
+      </div>
 
-            <div class="experience-item">
-                <h3>Data Analytics Engineer</h3>
-                <p class="company">San Jose State University, CA</p>
-                <p class="meta">Jan 2025 - Present</p>
-                <ul>
-                    <li>Engineered scalable data pipelines using SQL, Apache Spark, and AWS with Python to process large datasets, reducing processing time by 30% through optimization and automation</li>
-                    <li>Applied machine learning and statistical models (time-series forecasting, regression, classification) to predict enrollment demand and course overflow risk, improving planning accuracy and minimizing last-minute schedule changes</li>
-                    <li>Designed interactive Tableau and Looker dashboards with KPI reporting for stakeholder data storytelling, enabling 25% faster decision-making across departments and supporting $500K+ resource reallocation</li>
-                </ul>
-            </div>
+      <div class="experience-item">
+        <h3>Deep Learning Teaching Assistant</h3>
+        <p class="company">San Jose State University, CA</p>
+        <p class="meta">Aug 2024 - Dec 2024</p>
+        <ul>
+          <li>Taught and simplified advanced deep learning concepts (CNNs, RNNs, Transformers, LLMs) for 80+ graduate students through hands-on coding Python exercises in TensorFlow and PyTorch</li>
+          <li>Led weekly labs demonstrating end-to-end model workflows, including data preprocessing, training, hyperparameter tuning, optimization, and performance evaluation</li>
+          <li>Built structured grading rubrics and assessed 300+ projects/assignments (Agents, GANs, Prompt Engineering)</li>
+        </ul>
+      </div>
 
-            <div class="experience-item">
-                <h3>Deep Learning Teaching Assistant</h3>
-                <p class="company">San Jose State University, CA</p>
-                <p class="meta">Aug 2024 - Dec 2024</p>
-                <ul>
-                    <li>Taught and simplified advanced deep learning concepts (CNNs, RNNs, Transformers, LLMs) for 80+ graduate students through hands-on coding Python exercises in TensorFlow and PyTorch</li>
-                    <li>Led weekly labs demonstrating end-to-end model workflows, including data preprocessing, training, hyperparameter tuning, optimization, and performance evaluation</li>
-                    <li>Built structured grading rubrics and assessed 300+ projects/assignments (Agents, GANs, Prompt Engineering)</li>
-                </ul>
-            </div>
+      <div class="experience-item">
+        <h3>Political Data Intern</h3>
+        <p class="company">WeVote, CA</p>
+        <p class="meta">May 2024 - Aug 2024</p>
+        <ul>
+          <li>Created and maintained Python + Hive SQL pipelines (ingest, clean, aggregate) with validation checks and improved processing efficiency by 13%</li>
+          <li>Analyzed message-level engagement and conversion metrics to identify top-performing content and prioritize rollouts that increased response rates</li>
+          <li>Delivered Power BI ROI/KPI dashboards with clear metrics and auto-refresh for weekly decisions</li>
+        </ul>
+      </div>
 
-            <div class="experience-item">
-                <h3>Political Data Intern</h3>
-                <p class="company">WeVote, CA</p>
-                <p class="meta">May 2024 - Aug 2024</p>
-                <ul>
-                    <li>Created and maintained Python + Hive SQL pipelines (ingest, clean, aggregate) with validation checks and improved processing efficiency by 13%</li>
-                    <li>Analyzed message-level engagement and conversion metrics to identify top-performing content and prioritize rollouts that increased response rates</li>
-                    <li>Delivered Power BI ROI/KPI dashboards with clear metrics and auto-refresh for weekly decisions</li>
-                </ul>
-            </div>
+      <div class="experience-item">
+        <h3>Product Data Analyst</h3>
+        <p class="company">Perlite India, Pune</p>
+        <p class="meta">Jul 2021 - Nov 2022</p>
+        <ul>
+          <li>Automated ETL workflows and optimized SQL + Tableau dashboards to monitor sales, product performance, and customer acquisition across 1M+ sq. ft. projects</li>
+          <li>Developed standardized KPI models, improving reporting accuracy and reliability by 25% and enabling self-serve insights for business teams</li>
+          <li>Collaborated with operations, finance, and logistics teams to align Marketing Analytics with business goals, optimize resource allocation, and strengthen customer acquisition strategies, and conducted A/B testing on marketing and pricing</li>
+        </ul>
+      </div>
 
-            <div class="experience-item">
-                <h3>Product Data Analyst</h3>
-                <p class="company">Perlite India, Pune</p>
-                <p class="meta">Jul 2021 - Nov 2022</p>
-                <ul>
-                    <li>Automated ETL workflows and optimized SQL + Tableau dashboards to monitor sales, product performance, and customer acquisition across 1M+ sq. ft. projects</li>
-                    <li>Developed standardized KPI models, improving reporting accuracy and reliability by 25% and enabling self-serve insights for business teams</li>
-                    <li>Collaborated with operations, finance, and logistics teams to align Marketing Analytics with business goals, optimize resource allocation, and strengthen customer acquisition strategies, and conducted A/B testing on marketing and pricing</li>
-                </ul>
-            </div>
+      <div class="experience-item">
+        <h3>Data Scientist Intern</h3>
+        <p class="company">TechEra, Pune</p>
+        <p class="meta">Jan 2019 - May 2019</p>
+        <ul>
+          <li>Developed Python, Hive, and ETL workflows to process high-volume sensor streams, boosting data throughput by 35% and reducing latency in operational reporting for aerospace telemetry</li>
+          <li>Improved predictive models and anomaly detection scripts, improving reporting accuracy by 6%</li>
+          <li>Communicated model findings and system improvements to cross-functional engineering teams, converting data insights into operational strategies</li>
+        </ul>
+      </div>
+    </section>
 
-            <div class="experience-item">
-                <h3>Data Scientist Intern</h3>
-                <p class="company">TechEra, Pune</p>
-                <p class="meta">Jan 2019 - May 2019</p>
-                <ul>
-                    <li>Developed Python, Hive, and ETL workflows to process high-volume sensor streams, boosting data throughput by 35% and reducing latency in operational reporting for aerospace telemetry</li>
-                    <li>Improved predictive models and anomaly detection scripts, improving reporting accuracy by 6%</li>
-                    <li>Communicated model findings and system improvements to cross-functional engineering teams, converting data insights into operational strategies</li>
-                </ul>
-            </div>
-        </section>
+    <!-- Education Section -->
+    <section id="education">
+      <h2>Education</h2>
 
-        <!-- Education Section -->
-        <section id="education">
-            <h2>Education</h2>
+      <div class="education-item">
+        <h3>M.S. Applied Data Science</h3>
+        <p class="meta">San Jose State University, CA | Jan 2023 - Dec 2024</p>
+        <ul>
+          <li>Coursework: Database Systems, Machine Learning, Deep Learning, Data Mining, Data Visualization, Statistics</li>
+        </ul>
+      </div>
 
-            <div class="education-item">
-                <h3>M.S. Applied Data Science</h3>
-                <p class="meta">San Jose State University, CA | Jan 2023 - Dec 2024</p>
-                <ul>
-                    <li>Coursework: Database Systems, Machine Learning, Deep Learning, Data Mining, Data Visualization, Statistics</li>
-                </ul>
-            </div>
+      <div class="education-item">
+        <h3>B.E. Computer Engineering</h3>
+        <p class="meta">Pune University | Aug 2016 - Jun 2021</p>
+        <ul>
+          <li>Coursework: Database Management Systems, Computer Architecture, Software Testing, Object Oriented Programming</li>
+        </ul>
+      </div>
+    </section>
 
-            <div class="education-item">
-                <h3>B.E. Computer Engineering</h3>
-                <p class="meta">Pune University | Aug 2016 - Jun 2021</p>
-                <ul>
-                    <li>Coursework: Database Management Systems, Computer Architecture, Software Testing, Object Oriented Programming</li>
-                </ul>
-            </div>
-        </section>
+    <!-- Projects Section -->
+    <section id="projects">
+      <h2>Featured Projects</h2>
 
-        <!-- Projects Section -->
-        <section id="projects">
-            <h2>Featured Projects</h2>
+      <div class="project-item">
+        <h3>Intelligent Automation Agent using n8n</h3>
+        <p>
+          Developed an AI-powered automation agent in n8n that integrated LLM reasoning with tool-based
+          actions (HTTP, Gmail, custom code) to automate real-world workflows. Implemented context memory
+          and prompt engineering to enable the agent to understand user intent, maintain conversation state,
+          and execute multi-step tasks autonomously. Built and optimized modular workflow nodes for data
+          transformation, API calls, and notifications, improving task efficiency and reducing manual
+          intervention by over 60%.
+        </p>
+      </div>
 
-            <div class="project-item">
-                <h3>Intelligent Automation Agent using n8n</h3>
-                <p>
-                    Developed an AI-powered automation agent in n8n that integrated LLM reasoning with tool-based
-                    actions (HTTP, Gmail, custom code) to automate real-world workflows. Implemented context memory
-                    and prompt engineering to enable the agent to understand user intent, maintain conversation state,
-                    and execute multi-step tasks autonomously. Built and optimized modular workflow nodes for data
-                    transformation, API calls, and notifications, improving task efficiency and reducing manual
-                    intervention by over 60%.
-                </p>
-            </div>
+      <div class="project-item">
+        <h3>PII Detection using BERT & DeBERTa (Kaggle – Top 60 Global Rank)</h3>
+        <p>
+          Participated in a Kaggle competition hosted by The Learning Agency Lab and Vanderbilt University.
+          The objective was to develop a model to detect and remove personally identifiable information (PII) from educational data.
+          Leveraged BERT and Deberta models to create reliable automated techniques, enhancing the scalability and accessibility of educational datasets.
+          The project focused on improving recall while maintaining precision, evaluated using the micro F5 metric. This work supports the development of effective tools and
+          interventions for teachers and students by facilitating the release of high-quality public educational datasets.
+        </p>
+      </div>
+    </section>
 
-            <div class="project-item">
-                <h3>PII Detection using BERT & DeBERTa (Kaggle – Top 60 Global Rank)</h3>
-                <p>
-                    Participated in a Kaggle competition hosted by The Learning Agency Lab and Vanderbilt University.
-                    The objective was to develop a model to detect and remove personally identifiable information (PII) from educational data.
-                    Leveraged BERT and Deberta models to create reliable automated techniques, enhancing the scalability and accessibility of educational datasets.
-                    The project focused on improving recall while maintaining precision, evaluated using the micro F5 metric. This work supports the development of effective tools and
-                    interventions for teachers and students by facilitating the release of high-quality public educational datasets.
-                </p>
-            </div>
-        </section>
+    <!-- Skills Section -->
+    <section id="skills">
+      <h2>Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>Data Engineering & Analytics</h3>
+          <p>Python, SQL, PostgreSQL, Excel, AWS (S3, EC2, Sagemaker), Azure, Hadoop, Kafka, GCP, CI/CD,
+          Snowflake, Docker, Redshift, BigQuery, A/B Testing, Hypothesis Testing, Data Modelling</p>
+        </div>
 
-        <!-- Skills Section -->
-        <section id="skills">
-            <h2>Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Data Engineering & Analytics</h3>
-                    <p>Python, SQL, PostgreSQL, Excel, AWS (S3, EC2, Sagemaker), Azure, Hadoop, Kafka, GCP, CI/CD,
-                    Snowflake, Docker, Redshift, BigQuery, A/B Testing, Hypothesis Testing, Data Modelling</p>
-                </div>
+        <div class="skill-category">
+          <h3>BI & Collaboration Tools</h3>
+          <p>Tableau, Power BI, Looker Studio, Git/GitHub, JIRA, Selenium, Agile (Scrum/Kanban)</p>
+        </div>
 
-                <div class="skill-category">
-                    <h3>BI & Collaboration Tools</h3>
-                    <p>Tableau, Power BI, Looker Studio, Git/GitHub, JIRA, Selenium, Agile (Scrum/Kanban)</p>
-                </div>
+        <div class="skill-category">
+          <h3>Machine Learning</h3>
+          <p>Scikit-learn, Keras, Regression, Classification, Clustering, Time-Series Forecasting, Predictive Modeling
+          Random Forests, XGBoost, LightGBM, CatBoost, SVM, Naive Bayes, K-Means, DBSCAN, PCA</p>
+        </div>
 
-                <div class="skill-category">
-                    <h3>Machine Learning</h3>
-                    <p>Scikit-learn, Keras, Regression, Classification, Clustering, Time-Series Forecasting, Predictive Modeling
-                    Random Forests, XGBoost, LightGBM, CatBoost, SVM, Naive Bayes, K-Means, DBSCAN, PCA</p>
-                </div>
+        <div class="skill-category">
+          <h3>Deep Learning & Neural Networks</h3>
+          <p>TensorFlow, PyTorch, Keras, CNNs, RNNs, LSTM, Transformers, Transfer Learning, Model Training, Hyperparameter Tuning, GANs</p>
+        </div>
 
-                <div class="skill-category">
-                    <h3>Deep Learning & Neural Networks</h3>
-                    <p>TensorFlow, PyTorch, Keras, CNNs, RNNs, LSTM, Transformers, Transfer Learning, Model Training, Hyperparameter Tuning, GANs</p>
-                </div>
+        <div class="skill-category">
+          <h3>Generative AI</h3>
+          <p>LLM, Transformers, Autoencoders, LangChain, Hugging Face, Llama, Google AI Studio,
+          Vertex AI, Opal, OpenAI, Anthropic Claude, Google Gemini, Hugging Face
+          Fine-tuning (LoRA, QLoRA)</p>
+        </div>
+      </div>
+    </section>
 
-                <div class="skill-category">
-                    <h3>Generative AI</h3>
-                    <p>LLM, Transformers, Autoencoders, LangChain, Hugging Face, Llama, Google AI Studio,
-                    Vertex AI, Opal, OpenAI, Anthropic Claude, Google Gemini, Hugging Face
-                    Fine-tuning (LoRA, QLoRA)</p>
-                </div>
-            </div>
-        </section>
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+      <h2>Get in Touch</h2>
 
-        <!-- Contact Section -->
-        <section id="contact" class="contact-section">
-            <h2>Get in Touch</h2>
+      <p class="contact-text">
+        I'm always interested in new opportunities and collaborations.
+        Feel free to reach out.
+      </p>
 
-            <p class="contact-text">
-                I'm always interested in new opportunities and collaborations.
-                Feel free to reach out.
-            </p>
+      <div class="contact-cta">
+        <a href="mailto:swarajkul.us@gmail.com"
+           class="btn btn-primary"
+           aria-label="Send email to Swaraj Kulkarni">
+          Email Me
+        </a>
 
-            <div class="contact-cta">
-                <a href="mailto:swarajkul.us@gmail.com"
-                   class="btn btn-primary"
-                   aria-label="Send email to Swaraj Kulkarni">
-                    Email Me
-                </a>
+        <a href="https://linkedin.com/in/SwarajKul"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="btn btn-outline"
+           aria-label="Visit Swaraj Kulkarni LinkedIn profile">
+          LinkedIn
+        </a>
+      </div>
+    </section>
+  </div>
 
-                <a href="https://linkedin.com/in/SwarajKul"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="btn btn-outline"
-                   aria-label="Visit Swaraj Kulkarni LinkedIn profile">
-                    LinkedIn
-                </a>
-            </div>
-        </section>
-    </div>
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Swaraj Kulkarni. All rights reserved.</p>
+    <p style="margin-top: 0.5rem; opacity: 0.8;">Built with passion for data and insights</p>
+  </footer>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Swaraj Kulkarni. All rights reserved.</p>
-        <p style="margin-top: 0.5rem; opacity: 0.8;">Built with passion for data and insights</p>
-    </footer>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('navMenu');
+      menu.classList.toggle('active');
+    }
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('navMenu');
-            menu.classList.toggle('active');
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('navMenu').classList.remove('active');
+      });
+    });
+
+    // Smooth reveal on scroll
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
         }
+      });
+    }, observerOptions);
 
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navMenu').classList.remove('active');
-            });
-        });
+    document.querySelectorAll('.experience-item, .project-item, .education-item').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
 
-        // Add smooth reveal on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+    /* ===== DARK MODE TOGGLE (persist + system default) ===== */
+    const toggleBtn = document.getElementById("themeToggle");
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
+    // Initial theme: saved preference OR system preference
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-        document.querySelectorAll('.experience-item, .project-item, .education-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-    </script>
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+      document.body.classList.add("dark");
+      toggleBtn.textContent = "☀️";
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+
+      if (document.body.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+        toggleBtn.textContent = "☀️";
+      } else {
+        localStorage.setItem("theme", "light");
+        toggleBtn.textContent = "🌙";
+      }
+    });
+  </script>
 </body>
 </html>
