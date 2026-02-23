@@ -69,11 +69,16 @@
     }
 
     nav .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary-color);
-      white-space: nowrap;
-    }
+  display: flex;
+  align-items: center;
+  height: 40px; /* controls size */
+  color: var(--primary-color);
+}
+
+nav .logo svg {
+  height: 100%;
+  width: auto;
+}}
 
     nav ul {
       display: flex;
@@ -470,7 +475,27 @@
   <!-- Navigation -->
   <nav>
     <div class="container">
-      <div class="logo">SK</div>
+      <div class="logo">
+  <svg viewBox="0 0 64 64" aria-label="Swaraj Kulkarni logo">
+    <!-- S -->
+    <path d="M44 18C44 13 39.5 11 32.5 11C25.5 11 21 13 21 18C21 25 44 22 44 33C44 39 39.5 41.5 32.5 41.5C25.5 41.5 21 39 21 34"
+          stroke="currentColor" stroke-width="5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- K stem -->
+    <path d="M22 14V50"
+          stroke="currentColor" stroke-width="5"
+          stroke-linecap="round"/>
+
+    <!-- K arms -->
+    <path d="M22 32L44 14"
+          stroke="currentColor" stroke-width="5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M22 32L44 50"
+          stroke="currentColor" stroke-width="5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</div>
 
       <div class="menu-toggle" onclick="toggleMenu()">
         <span></span><span></span><span></span>
