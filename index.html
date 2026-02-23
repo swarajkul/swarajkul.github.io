@@ -465,100 +465,79 @@
 
     .pacman-modal.open{ display: grid; }
 
-    .pacman-dialog{
-      width: min(720px, 95vw);
-      background: var(--bg-main);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      box-shadow: var(--shadow-md);
-      overflow: hidden;
-    }
+    /* --- Mobile-first modal sizing + layout --- */
+.pacman-dialog{
+  width: min(720px, 96vw);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
 
-    .pacman-header{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.9rem 1rem;
-      background: var(--bg-light);
-      border-bottom: 1px solid var(--border-color);
-    }
+/* Header stays fixed height */
+.pacman-header{ flex: 0 0 auto; }
 
-    .pacman-title{
-      font-weight: 700;
-      color: var(--text-dark);
-      letter-spacing: -0.01em;
-    }
+/* Canvas area becomes flexible and centers the canvas */
+.pacman-stage{
+  flex: 1 1 auto;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+  background: var(--bg-main);
+}
 
-    .pacman-close{
-      border: 1px solid var(--border-color);
-      background: var(--bg-main);
-      color: var(--text-dark);
-      border-radius: 10px;
-      padding: 0.35rem 0.6rem;
-      cursor: pointer;
-      transition: transform 180ms ease, box-shadow 180ms ease;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
+/* Make canvas fit height/width without cropping */
+#pacmanCanvas{
+  width: 100%;
+  max-width: 680px;
+  height: auto;
+  max-height: 48vh;            /* key: prevents canvas from stealing whole modal */
+  display: block;
+  border-radius: 12px;
+  background: #05070f;
+}
 
-    .pacman-close:hover{
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
-    }
+/* Put controls at bottom; don't let them take huge space */
+.pacman-controls{
+  flex: 0 0 auto;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-light);
+}
 
-    #pacmanCanvas{
-      width: 100%;
-      height: auto;
-      display: block;
-      background: #05070f;
-      touch-action: none; /* avoid swipe scroll while playing */
-    }
+/* Compact d-pad */
+.pad-btn{
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  font-weight: 800;
+  box-shadow: var(--shadow-sm);
+}
 
-    .pacman-help{
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      padding: 0.75rem 1rem;
-      color: var(--text-light);
-      background: var(--bg-main);
-      border-top: 1px solid var(--border-color);
-      font-size: 0.95rem;
-    }
+.pacman-controls .pad-row{ display: flex; gap: 10px; }
 
-    /* ===== Mobile D-pad controls ===== */
-    .pacman-controls{
-      display: none;
-      gap: 0.6rem;
-      padding: 0.9rem 1rem 1.1rem;
-      background: var(--bg-main);
-      border-top: 1px solid var(--border-color);
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
+/* Hide desktop help on small screens */
+@media (max-width: 768px){
+  .pacman-help{ display: none; }
+}
 
-    .pacman-controls .pad-row{
-      display: flex;
-      gap: 0.6rem;
-    }
-
-    .pad-btn{
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-light);
-      color: var(--text-dark);
-      font-size: 1.2rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      touch-action: manipulation;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform 120ms ease, box-shadow 120ms ease;
-    }
+/* EXTRA: For very small screens, shrink buttons a bit more */
+@media (max-width: 380px){
+  #pacmanCanvas{ max-height: 44vh; }
+  .pad-btn{ width: 46px; height: 46px; border-radius: 12px; }
+}
 
     .pad-btn:active{
       transform: translateY(1px);
